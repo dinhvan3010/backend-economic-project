@@ -1,14 +1,17 @@
 package net.codejava;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import net.codejava.Model.User;
+import net.codejava.enums.UserRole;
 import net.codejava.repository.UserRepository;
 
 @SpringBootApplication
-public class Application  {
+public class Application implements CommandLineRunner {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -20,15 +23,15 @@ public class Application  {
 		SpringApplication.run(Application.class, args);
 	}
 
-//	@Override
-//	public void run(String... args) throws Exception {
-//		User user = new User();
-//		user.setEmail("admin");
-//		user.setPassword(passwordEncoder.encode("admin"));
-//		user.setRole(UserRole.ADMIN);
-//		user.setEnabled(true);
-//		userRepo.save(user);
-//		
-//	}
+	@Override
+	public void run(String... args) throws Exception {
+		User user = new User();
+		user.setEmail("cuongqn2023@gmail.com");
+		user.setPassword(passwordEncoder.encode("admin"));
+		user.setRole(UserRole.ADMIN);
+		user.setEnabled(true);
+		userRepo.save(user);
+		
+	}
 
 }

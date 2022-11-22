@@ -1,112 +1,102 @@
 package net.codejava.Model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import net.codejava.enums.UserRole;
+import net.codejava.enums.Gender;
 
 @Entity
 @Table(name = "profiles")
-public class Profile implements UserDetails {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	@Column(nullable = false, length = 50, unique = true)
-	private String email;
-	
-	@Column(nullable = false, length = 64)
-	private String password;
-	
-	  private UserRole role;
-	    private  boolean isEnabled;
+public class Profile {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String firstName;
+	private String lastName;
+	private String image;
+	private Gender gender;
+	private Date birthday;
+	@OneToOne(mappedBy = "profile")
+	private User user;
 
-	public Profile() { }
-	
-	public Profile(String email, String password) {
-		this.email = email;
-		this.password = password;
+	public Profile() {
+
 	}
 
-	public Integer getId() {
+	public Profile(int id, String firstName, String lastName, @NotNull String image, @NotNull Gender gender,
+			Date birthday, User user) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.image = image;
+		this.gender = gender;
+		this.birthday = birthday;
+		this.user = user;
+	}
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	
-
-	public UserRole getRole() {
-		return role;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public void setRole(UserRole role) {
-		this.role = role;
+	public String getImage() {
+		return image;
 	}
 
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.toString()));
-        return authorities;
+	public Gender getGender() {
+		return gender;
 	}
 
-	@Override
-	public String getUsername() {
-		return this.email;
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
+	public Date getBirthday() {
+		return birthday;
 	}
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
+	public User getUser() {
+		return user;
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return isEnabled;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

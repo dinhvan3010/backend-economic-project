@@ -23,7 +23,7 @@ import net.codejava.utils.StaticData;
 @RestController
 @RequestMapping("/api/user")
 public class UserController extends AbstractRestController {
-	
+
 	@Autowired
 	UserService userService;
 	@Autowired
@@ -32,7 +32,8 @@ public class UserController extends AbstractRestController {
 	MailService mail;
 
 	@PostMapping("/forgot_password")
-	public StatusResp processForgotPassword(@Valid @RequestBody ForgetPasswordRequest request,  BindingResult bindingResult) {
+	public StatusResp processForgotPassword(@Valid @RequestBody ForgetPasswordRequest request,
+			BindingResult bindingResult) {
 		checkBindingResult(bindingResult);
 		StatusResp statusResp = new StatusResp();
 		String email = request.getRecipientEmail();
@@ -46,12 +47,26 @@ public class UserController extends AbstractRestController {
 		userService.updatePassword(user, newPw);
 		return statusResp;
 	}
-	
+
 	@PostMapping("/register")
-	public StatusResp registerUser(@Valid @RequestBody RegisterRequest request) {
+	public StatusResp registerUser(@RequestBody RegisterRequest request) {
 		StatusResp statusResp = new StatusResp();
-		
+		if (!request.getPassword().equals(request.getConfirmPassword())) {
+			throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getMessage(),
+					StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getCode());
+		}
+		userRepo.CreaterAccount(request.getEmail(),request.getPassword() , request.getFirstName(), request.getLastName(), request.getImage(), request.getGender());
 		return statusResp;
+	}
+
+	@PostMapping("/checkExistEmail")
+	public StatusResp checkExistEmail(@RequestBody RegisterRequest request) {
+		StatusResp resp = new StatusResp();
+		if (userRepo.existsByEmail(request.getEmail())) {
+			throw new MyAppException(StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getMessage(),
+					StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getCode());
+		}
+		return resp;
 	}
 
 }
