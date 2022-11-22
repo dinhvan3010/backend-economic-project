@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.codejava.Model.User;
@@ -18,6 +19,7 @@ import net.codejava.response.AuthResponse;
 import net.codejava.response.StatusResp;
 
 @RestController
+@RequestMapping("/api")
 public class AuthApi extends AbstractRestController {
 	@Autowired
 	AuthenticationManager authManager;
