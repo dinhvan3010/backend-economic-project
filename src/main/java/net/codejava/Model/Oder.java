@@ -39,6 +39,7 @@ public class Oder {
 	private String deliveryAddress;
 	private String paymentMethod;
 	private String notes;
+	private String test;
 	private int status;
 	private Date createdDate;
 	@ManyToOne
