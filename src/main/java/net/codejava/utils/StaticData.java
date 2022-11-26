@@ -20,6 +20,7 @@ public class StaticData {
 
 		// General 405
 		INVALID_SUBMIT_DATA(405001, "Invalid submit data"),
+		WRONG_FORMAT(405002, "WRONG FORMAT"),
 
 		PASSWORD_CONFIRMATION_NOT_MATCH(404013, "Password confirmation does not match"),
 		NOT_FOUND_EMAIL(406001, "Not found email"), CUSTOMER_EXIST_EMAIL(406002, "This email already exists"),

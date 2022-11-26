@@ -18,11 +18,17 @@ import net.codejava.enums.Gender;
 public class Profile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
 	private int id;
+	@Column
 	private String firstName;
+	@Column
 	private String lastName;
+	@Column
 	private String image;
+	@Column
 	private Gender gender;
+	@Column
 	private Date birthday;
 	@OneToOne(mappedBy = "profile")
 	private User user;

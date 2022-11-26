@@ -23,7 +23,7 @@ public class RegisterRequest {
 	private String lastName;
 	private String image;
 	@NotNull
-	private Gender gender;
+	private String gender;
 
 	private Date birthday;
 
@@ -75,11 +75,11 @@ public class RegisterRequest {
 		this.image = image;
 	}
 
-	public Gender getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 

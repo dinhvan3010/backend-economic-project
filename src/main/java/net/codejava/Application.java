@@ -25,13 +25,12 @@ public class Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = new User();
-		user.setEmail("cuongqn2023@gmail.com");
-		user.setPassword(passwordEncoder.encode("admin"));
-		user.setRole(UserRole.ADMIN);
-		user.setEnabled(true);
-		userRepo.save(user);
-		
+//		User user = new User();
+//		user.setEmail("cuongqn2023@gmail.com");
+//		user.setPassword(passwordEncoder.encode("admin"));
+//		user.setRole(UserRole.ADMIN);
+//		user.setEnabled(true);
+//		userRepo.save(user);	
 	}
 
 }

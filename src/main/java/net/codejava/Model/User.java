@@ -27,6 +27,7 @@ import net.codejava.enums.UserRole;
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column
 	private Integer id;
 
 	@Column(nullable = false, length = 50, unique = true)
@@ -35,8 +36,10 @@ public class User implements UserDetails {
 	@Column(nullable = false, length = 64)
 	private String password;
 
+	@Column
 	private UserRole role;
 
+	@Column
 	private boolean isEnabled;
 
 	@Column(updatable = false)
@@ -44,10 +47,9 @@ public class User implements UserDetails {
 
 	@LastModifiedDate
 	private Date modifiedDate;
-	
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "profile_id", referencedColumnName = "id")
+	@JoinColumn(name = "profile_id")
 	private Profile profile;
 
 	public User() {
