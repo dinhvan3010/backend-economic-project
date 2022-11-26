@@ -11,9 +11,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import lombok.*;
 import net.codejava.enums.Gender;
 
 @Entity
+@Data
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "profiles")
 public class Profile {
 	@Id
@@ -29,80 +35,10 @@ public class Profile {
 	@Column
 	private Gender gender;
 	@Column
+	private String photoId;
+	@Column
 	private Date birthday;
 	@OneToOne(mappedBy = "profile")
 	private User user;
-
-	public Profile() {
-
-	}
-
-	public Profile(int id, String firstName, String lastName, @NotNull String image, @NotNull Gender gender,
-			Date birthday, User user) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.image = image;
-		this.gender = gender;
-		this.birthday = birthday;
-		this.user = user;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public Date getBirthday() {
-		return birthday;
-	}
-
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 }

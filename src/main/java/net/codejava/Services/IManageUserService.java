@@ -18,5 +18,7 @@ public interface IManageUserService {
 	 void registerUser(RegisterRequest request ,  MultipartFile file);
 	 
 	 UserRespDTO getUserProfile(int id);
+
+	 void changePassword(int id ,  String password);
 	
 }

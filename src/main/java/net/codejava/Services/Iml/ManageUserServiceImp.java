@@ -66,6 +66,7 @@ public class ManageUserServiceImp implements IManageUserService {
 			profile.setImage(request.getImage());
 			profile.setGender(Gender.valueOf(request.getGender()));
 			Map result = cloudinaryService.upload(file);
+			profile.setPhotoId(result.get("public_id").toString());
 			profile.setImage((String) result.get("url"));
 			User user = new User();
 			user.setEmail(request.getEmail());
@@ -85,6 +86,13 @@ public class ManageUserServiceImp implements IManageUserService {
 		User user = userRepo.getById(id);
 		UserRespDTO userRespDTO = UserConverter.toRespDTO(user);
 		return userRespDTO;
+	}
+
+	@Override
+	public void changePassword(int id, String password) {
+		User user = userRepo.getById(id);
+		user.setPassword(passwordEncoder.encode(password));
+		userRepo.save(user);
 	}
 
 }
