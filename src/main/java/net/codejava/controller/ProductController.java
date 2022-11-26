@@ -52,16 +52,16 @@ public class ProductController extends AbstractRestController {
 
 	@GetMapping("/list")
 	public StatusResp getProducts(@RequestParam(required = false) String name,
-			@RequestParam(defaultValue = "unitPrice") String softBy, @RequestParam int brandId,
-			@RequestParam int cateloryId, @RequestParam int pageNum, @RequestParam int pageSize) {
+			@RequestParam(defaultValue = "unitPrice") String softBy, @RequestParam(required = false) int brandId,
+			@RequestParam (required = false) int cateloryId, @RequestParam int pageNum, @RequestParam int pageSize) {
 		StatusResp resp = new StatusResp();
 		Pageable paging = PageRequest.of(pageNum, pageSize);
 		DataPagingResp<ProductRespDTO> dataPagingResp = productService.getProduct(pageNum, pageSize, name, softBy,
 				brandId, cateloryId);
 		Brand brand = brandRepository.findOneById(brandId);
-		System.out.print(brand.getName());
-		List<Product> a = productRepository.findAllByBrand_Id(brandId);
-		resp.setData(brand);
+		List<Product> products = productRepository.findAllByBrand_IdAndCatelory_Id(brandId, cateloryId);
+		List<ProductRespDTO> list = converter.toListResponse(products, ProductConverter::toRespDTO);
+		resp.setData(list);
 		return resp;
 	}
 

@@ -19,6 +19,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -33,8 +34,13 @@ public class Oder {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	@Column(updatable = false)
-	private Date createdDate;
+	private String deliveryName;
+	private String deliveryPhoneNum;
+	private String deliveryAddress;
+	private String paymentMethod;
+	private String notes;
 	private int status;
+	private Date createdDate;
 	@ManyToOne
 	private User user;
 	@OneToMany(mappedBy = "oder")
