@@ -15,22 +15,24 @@ public class Application implements CommandLineRunner {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	UserRepository userRepo;
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-//		User user = new User();
-//		user.setEmail("cuongqn2023@gmail.com");
-//		user.setPassword(passwordEncoder.encode("admin"));
-//		user.setRole(UserRole.ADMIN);
-//		user.setEnabled(true);
-//		userRepo.save(user);	
+		User user = new User();
+		String username = "cuongqn2023@gmail.com";
+		if (userRepo.existsByEmail(username)) {
+			user.setEmail("");
+			user.setPassword(passwordEncoder.encode("admin"));
+			user.setRole(UserRole.ADMIN);
+			user.setEnabled(true);
+			userRepo.save(user);
+		}
 	}
-
 }
