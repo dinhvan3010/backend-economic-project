@@ -48,6 +48,8 @@ public class Product {
 	@JoinColumn(name = "catelory_id")
 	private Catelory catelory;
 	@OneToMany(mappedBy = "product")
+	private List<OderDetail> oderDetails;
+	@OneToMany(mappedBy = "product")
 	private List<ProductImage> images;
 	@Column(updatable = false)
 	private Date createdDate;

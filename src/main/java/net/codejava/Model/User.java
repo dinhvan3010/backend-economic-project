@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -44,7 +45,9 @@ public class User implements UserDetails {
 
 	@Column(updatable = false)
 	private Date createdDate;
-
+	@OneToMany(mappedBy = "user")
+	private List<Oder> oders;
+	
 	@LastModifiedDate
 	private Date modifiedDate;
 
@@ -151,5 +154,14 @@ public class User implements UserDetails {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+
+	public List<Oder> getOders() {
+		return oders;
+	}
+
+	public void setOders(List<Oder> oders) {
+		this.oders = oders;
+	}
+	
 
 }
