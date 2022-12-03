@@ -13,6 +13,7 @@ import net.codejava.Model.User;
 import net.codejava.Services.IManageUserService;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.jwt.JwtTokenUtil;
+import net.codejava.repository.UserRepository;
 import net.codejava.utils.StaticData;
 
 public abstract class AbstractRestController {
@@ -23,6 +24,9 @@ public abstract class AbstractRestController {
 
 	@Autowired
 	protected IManageUserService userServiceImpl;
+	
+	@Autowired
+	UserRepository userRepo;
 
 	protected void checkBindingResult(BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -39,7 +43,8 @@ public abstract class AbstractRestController {
 	}
 
 	protected User getUserSession() {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User userSession = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = userRepo.getById(userSession.getId());
 		if (user == null) {
 			throw new MyAppException(StaticData.ERROR_CODE.NOT_FOUND_USER_SESSION.getMessage(),
 					StaticData.ERROR_CODE.NOT_FOUND_USER_SESSION.getCode());
