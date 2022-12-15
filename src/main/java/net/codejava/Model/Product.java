@@ -46,7 +46,7 @@ public class Product {
 	private Brand brand;
 	@ManyToOne
 	@JoinColumn(name = "catelory_id")
-	private Catelory catelory;
+	private Category category;
 	@OneToMany(mappedBy = "product")
 	private List<OderDetail> oderDetails;
 	@OneToMany(mappedBy = "product")

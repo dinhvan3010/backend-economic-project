@@ -1,4 +1,4 @@
-package net.codejava.Services;
+package net.codejava.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

@@ -1,11 +1,10 @@
 package net.codejava.controller;
 
 import net.bytebuddy.utility.RandomString;
-import net.codejava.Model.Profile;
 import net.codejava.Model.User;
-import net.codejava.Services.CloudinaryService;
-import net.codejava.Services.IManageUserService;
-import net.codejava.Services.MailService;
+import net.codejava.services.CloudinaryService;
+import net.codejava.services.IManageUserService;
+import net.codejava.services.MailService;
 import net.codejava.dto.UserRespDTO;
 import net.codejava.enums.Gender;
 import net.codejava.exceptions.MyAppException;
@@ -18,7 +17,6 @@ import net.codejava.response.StatusResp;
 import net.codejava.utils.StaticData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -131,7 +129,7 @@ public class UserController extends AbstractRestController {
         return resp;
     }
 
-    @PutMapping("changePassword")
+    @PutMapping("/changePassword")
     public StatusResp changePassword(@RequestBody @Valid ChangePasswordRequest request, BindingResult bindingResult) {
         checkBindingResult(bindingResult);
         StatusResp resp = new StatusResp();

@@ -13,17 +13,12 @@ public class StaticData {
 		NEW_PASSWORD_SAME_CURRENT_PASSWORD(404007, "New password be same as current password"),
 		INVALID_VERIFY_PASSWORD(404008, "Invalid verify password"),
 		NOT_FOUND_USER_SESSION(404009, "Not found user session"), NOT_FOUND_CUSTOMER(404010, "Not found customer"),
-		CUSTOMER_EXIST_CORP(404011, "This phone number already exists corp"),
-		NOT_SAME_VENDOR_WITH_CUSTOMER(404012, "Not same vendor with Customer"),
-
-		CUSTOMER_LOCKED(404014, "The customer has been locked"),
-
-		// General 405
 		INVALID_SUBMIT_DATA(405001, "Invalid submit data"),
 		WRONG_FORMAT(405002, "WRONG FORMAT"),
-
-		PASSWORD_CONFIRMATION_NOT_MATCH(404013, "Password confirmation does not match"),
-		NOT_FOUND_EMAIL(406001, "Not found email"), CUSTOMER_EXIST_EMAIL(406002, "This email already exists"),
+		NOT_FOUND_EMAIL(406001, "Not found email"),
+		CUSTOMER_EXIST_EMAIL(406002, "This email already exists"),
+		PRODUCT_EXIST_FAVORITE(406003, "The product already exists in the wishlist"),
+		PRODUCT_NOT_FOUND(406003, "Product not found")
 
 		;
 

@@ -1,9 +1,8 @@
-package net.codejava.Services.Iml;
+package net.codejava.services.iml;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
@@ -15,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import net.codejava.Model.Profile;
 import net.codejava.Model.User;
-import net.codejava.Services.CloudinaryService;
-import net.codejava.Services.IManageUserService;
+import net.codejava.services.CloudinaryService;
+import net.codejava.services.IManageUserService;
 import net.codejava.converter.UserConverter;
 import net.codejava.dto.UserRespDTO;
 import net.codejava.enums.Gender;

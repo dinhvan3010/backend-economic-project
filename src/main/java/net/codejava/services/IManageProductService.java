@@ -1,4 +1,4 @@
-package net.codejava.Services;
+package net.codejava.services;
 
 import org.springframework.stereotype.Service;
 
@@ -8,6 +8,6 @@ import net.codejava.dto.ProductRespDTO;
 @Service
 public interface IManageProductService {
 
-	DataPagingResp<ProductRespDTO> getProduct(int page, int size, String name , String softBy, int brandId, int cateloryId);
+	DataPagingResp<ProductRespDTO> getProduct(int page, int size, String name , int brandId, int cateloryId);
 
 }

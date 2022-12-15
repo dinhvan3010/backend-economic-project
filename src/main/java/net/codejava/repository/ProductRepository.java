@@ -3,6 +3,7 @@ package net.codejava.repository;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,8 +20,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	List<Product> findAllByBrand(Brand brand);
 
-	List<Product> findAllByBrand_Id(int brandId);
+	Page<Product>  findAllByBrand_Id(Pageable page , int brandId);
 
-	List<Product> findAllByBrand_IdAndCatelory_Id(int brandId, int cateloryId);
+	Page<Product> findAllByCategory_Id(Pageable page, int categoryId);
+
+	List<Product> findAllByBrand_IdAndCategory_Id(int brandId, int categoryId);
+
 
 }

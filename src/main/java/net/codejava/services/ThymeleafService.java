@@ -1,4 +1,4 @@
-package net.codejava.Services;
+package net.codejava.services;
 
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,5 @@
 package net.codejava.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import net.codejava.Model.User;
-import net.codejava.Services.IManageUserService;
+import net.codejava.services.IManageUserService;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.jwt.JwtTokenUtil;
 import net.codejava.utils.StaticData;

@@ -1,11 +1,11 @@
 package net.codejava.repository;
 
+import net.codejava.Model.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import net.codejava.Model.Catelory;
-
 @Repository
-public interface CateloryRepository extends JpaRepository<Catelory, Integer> {
+public interface ProductImageRepository extends JpaRepository<ProductImage, Integer> {
+
 
 }

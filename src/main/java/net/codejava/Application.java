@@ -28,9 +28,10 @@ public class Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		User user = new User();
 		String username = "cuongqn2023@gmail.com";
-		if (userRepo.existsByEmail(username) == false) {
+		String password = "admin";
+		if (!userRepo.existsByEmail(username)) {
 			user.setEmail(username);
-			user.setPassword(passwordEncoder.encode("admin"));
+			user.setPassword(passwordEncoder.encode(password));
 			user.setRole(UserRole.ADMIN);
 			user.setEnabled(true);
 			user.setCreatedDate(DateUtil.now());

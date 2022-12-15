@@ -1,4 +1,4 @@
-package net.codejava.Services;
+package net.codejava.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

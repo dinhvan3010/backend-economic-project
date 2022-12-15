@@ -1,4 +1,4 @@
-package net.codejava.Services.Iml;
+package net.codejava.services.iml;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.function.Function;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import net.codejava.Services.IListConverter;
+import net.codejava.services.IListConverter;
 import net.codejava.dto.DataPagingResp;
 
 @Component

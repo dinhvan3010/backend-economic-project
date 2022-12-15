@@ -21,14 +21,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Entity
-public class Catelory {
+public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	private String name;
 
-	@OneToMany(mappedBy = "catelory")
+	@OneToMany(mappedBy = "category")
 	private List<Product> products;
 
 	{

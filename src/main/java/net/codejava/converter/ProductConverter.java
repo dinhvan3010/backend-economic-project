@@ -5,7 +5,7 @@ import java.util.List;
 
 
 import net.codejava.Model.Brand;
-import net.codejava.Model.Catelory;
+import net.codejava.Model.Category;
 import net.codejava.Model.Product;
 import net.codejava.Model.ProductImage;
 import net.codejava.dto.ImageRespDTO;
@@ -14,7 +14,7 @@ import net.codejava.dto.ProductRespDTO;
 public class ProductConverter {
 	public static ProductRespDTO toRespDTO(Product entity) {
 		Brand brand = entity.getBrand();
-		Catelory catelory = entity.getCatelory();
+		Category catelory = entity.getCategory();
 		List<ProductImage> pi = entity.getImages();
 
 		ProductRespDTO productRespDTO = ProductRespDTO.builder().id(entity.getId()).name(entity.getName())

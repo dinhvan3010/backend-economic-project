@@ -1,4 +1,4 @@
-package net.codejava.Services;
+package net.codejava.services;
 
 import java.util.List;
 import java.util.function.Function;

@@ -26,8 +26,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "produc_favoutite")
-public class ProductFavoutite {
+@Table(name = "wish_list")
+public class WishList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
