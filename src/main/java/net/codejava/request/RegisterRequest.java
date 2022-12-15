@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
-import net.codejava.enums.Gender;
 
 public class RegisterRequest {
 	@NotNull

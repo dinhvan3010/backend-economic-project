@@ -1,6 +1,7 @@
 package net.codejava.controller;
 
 import net.bytebuddy.utility.RandomString;
+import net.codejava.Model.Profile;
 import net.codejava.Model.User;
 import net.codejava.services.CloudinaryService;
 import net.codejava.services.IManageUserService;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.imageio.ImageIO;
 import javax.validation.Valid;
@@ -31,114 +33,121 @@ import java.util.Map;
 @RequestMapping("/api/user")
 public class UserController extends AbstractRestController {
 
-    @Autowired
-    IManageUserService userService;
-    @Autowired
-    UserRepository userRepo;
-    @Autowired
-    MailService mail;
+	@Autowired
+	IManageUserService userService;
+	@Autowired
+	UserRepository userRepo;
+	@Autowired
+	MailService mail;
+	@Autowired
+	CloudinaryService cloudinaryService;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
-    @Autowired
-    CloudinaryService cloudinaryService;
+	@PostMapping("/forgot_password")
+	public StatusResp processForgotPassword(@Valid @RequestBody ForgetPasswordRequest request,
+			BindingResult bindingResult) {
+		checkBindingResult(bindingResult);
+		StatusResp statusResp = new StatusResp();
+		String email = request.getRecipientEmail();
+		String newPw = RandomString.make(6);
+		User user = userService.findUserByEmail(email);
+		if (user == null) {
+			throw new MyAppException(StaticData.ERROR_CODE.NOT_FOUND_EMAIL.getMessage(),
+					StaticData.ERROR_CODE.NOT_FOUND_EMAIL.getCode());
+		}
+		mail.sendMail(email, newPw);
+		userService.updatePassword(user, newPw);
+		return statusResp;
+	}
 
-    @PostMapping("/forgot_password")
-    public StatusResp processForgotPassword(@Valid @RequestBody ForgetPasswordRequest request,
-                                            BindingResult bindingResult) {
-        checkBindingResult(bindingResult);
-        StatusResp statusResp = new StatusResp();
-        String email = request.getRecipientEmail();
-        String newPw = RandomString.make(6);
-        User user = userService.findUserByEmail(email);
-        if (user == null) {
-            throw new MyAppException(StaticData.ERROR_CODE.NOT_FOUND_EMAIL.getMessage(),
-                    StaticData.ERROR_CODE.NOT_FOUND_EMAIL.getCode());
-        }
-        mail.sendMail(email, newPw);
-        userService.updatePassword(user, newPw);
-        return statusResp;
-    }
+	@PostMapping(value = "/register", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.MULTIPART_FORM_DATA_VALUE })
+	public StatusResp registerUser(@RequestPart("user") @Valid RegisterRequest request, @RequestPart MultipartFile file,
+			BindingResult bindingResult) {
+		checkBindingResult(bindingResult);
+		StatusResp statusResp = new StatusResp();
+		if (!request.getPassword().equals(request.getConfirmPassword())) {
+			throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getMessage(),
+					StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getCode());
+		}
+		if (userRepo.existsByEmail(request.getEmail())) {
+			throw new MyAppException(StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getMessage(),
+					StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getCode());
+		}
+		userService.registerUser(request, file);
+		return statusResp;
+	}
 
-    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE})
-    public StatusResp registerUser(@RequestPart("user") @Valid RegisterRequest request, @RequestPart MultipartFile file,
-                                   BindingResult bindingResult) {
-        checkBindingResult(bindingResult);
-        StatusResp statusResp = new StatusResp();
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getMessage(),
-                    StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getCode());
-        }
-        if (userRepo.existsByEmail(request.getEmail())) {
-            throw new MyAppException(StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getMessage(),
-                    StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getCode());
-        }
-        userService.registerUser(request, file);
-        return statusResp;
-    }
+	@PostMapping("/checkExistEmail")
+	public StatusResp checkExistEmail(@RequestBody RegisterRequest request) {
+		StatusResp resp = new StatusResp();
+		if (userRepo.existsByEmail(request.getEmail())) {
+			throw new MyAppException(StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getMessage(),
+					StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getCode());
+		}
+		return resp;
+	}
 
-    @PostMapping("/checkExistEmail")
-    public StatusResp checkExistEmail(@RequestBody RegisterRequest request) {
-        StatusResp resp = new StatusResp();
-        if (userRepo.existsByEmail(request.getEmail())) {
-            throw new MyAppException(StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getMessage(),
-                    StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getCode());
-        }
-        return resp;
-    }
+	@GetMapping("/whoami")
+	public StatusResp whoami() {
+		StatusResp resp = new StatusResp();
+		User user = getUserSession();
+		UserRespDTO userRespDTO = userService.getUserProfile(user.getId());
+		resp.setData(userRespDTO);
+		return resp;
+	}
 
-    @GetMapping("/whoami")
-    public StatusResp whoami() {
-        StatusResp resp = new StatusResp();
-        User user = getUserSession();
-        UserRespDTO userRespDTO = userService.getUserProfile(user.getId());
-        resp.setData(userRespDTO);
-        return resp;
-    }
+	@PutMapping(value = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+	public StatusResp updateUser(@RequestPart("user") @Valid UpdateUserRequest request, @RequestPart MultipartFile file,
+			BindingResult bindingResult) {
+		checkBindingResult(bindingResult);
+		StatusResp resp = new StatusResp();
+		BufferedImage bi;
+		User userSession = getUserSession();
+		User user = userRepo.getById(userSession.getId());
+		Profile profile = user.getProfile();
+		if (request.getFirstName() != null) {
+			profile.setFirstName(request.getFirstName());
+		}
+		if (request.getLastName() != null) {
+			profile.setLastName(request.getLastName());
+		}
+		if (request.getGender() != null) {
+			profile.setGender(Gender.valueOf(request.getGender()));
+		}
+		try {
+			bi = ImageIO.read(file.getInputStream());
+			if (bi != null) {
+				cloudinaryService.delete(profile.getPhotoId());
+				Map result = cloudinaryService.upload(file);
+				user.getProfile().setImage((String) result.get("url"));
+				user.getProfile().setPhotoId(result.get("public_id").toString());
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		userRepo.save(user);
+		return resp;
+	}
 
-    @PutMapping(value = "/update", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE})
-    public StatusResp updateUser(@RequestPart("user") @Valid UpdateUserRequest request, @RequestPart MultipartFile file,
-                                 BindingResult bindingResult) {
-        checkBindingResult(bindingResult);
-        StatusResp resp = new StatusResp();
-        BufferedImage bi;
-        User userSession = getUserSession();
-        User user = userRepo.getById(userSession.getId());
-        UserRespDTO userRespDTO = userService.getUserProfile(user.getId());
-        if (request.getFirstName() != null) {
-            user.getProfile().setFirstName(request.getFirstName());
-        }
-        if (request.getLastName() != null) {
-            user.getProfile().setLastName(request.getLastName());
-        }
-        if (request.getGender() != null) {
-            user.getProfile().setGender(Gender.valueOf(request.getGender()));
-        }
-        try {
-            bi = ImageIO.read(file.getInputStream());
-            if (bi != null) {
-                cloudinaryService.delete(user.getProfile().getPhotoId());
-                Map result = cloudinaryService.upload(file);
-                user.getProfile().setImage((String) result.get("url"));
-                user.getProfile().setPhotoId(result.get("public_id").toString());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        userRepo.save(user);
-        return resp;
-    }
+	@PutMapping("/changePassword")
+	public StatusResp changePassword(@RequestBody @Valid ChangePasswordRequest request, BindingResult bindingResult) {
+		checkBindingResult(bindingResult);
+		User userSession = getUserSession();
+		if (!passwordEncoder.matches(request.getOldPassword(), userSession.getPassword())) {
+			throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_SAME_CURRENT_PASSWORD.getMessage(),
+					StaticData.ERROR_CODE.NEW_PASSWORD_SAME_CURRENT_PASSWORD.getCode());
+		}
 
-    @PutMapping("/changePassword")
-    public StatusResp changePassword(@RequestBody @Valid ChangePasswordRequest request, BindingResult bindingResult) {
-        checkBindingResult(bindingResult);
-        StatusResp resp = new StatusResp();
-        if (!request.getPassword().equals(request.getConfirmPassword())) {
-            throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getMessage(),
-                    StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getCode());
-        }
-        User userSession = getUserSession();
-        userService.changePassword(userSession.getId(), request.getPassword());
-        return resp;
-    }
+		if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+			throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getMessage(),
+					StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getCode());
+		}
+
+		StatusResp resp = new StatusResp();
+		userService.changePassword(userSession.getId(), request.getNewPassword());
+		return resp;
+	}
+
 }

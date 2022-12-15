@@ -12,6 +12,7 @@ public class StaticData {
 		NEW_PASSWORD_CONFIRMATION_NOT_MATCH(404006, "New password confirmation does not match"),
 		NEW_PASSWORD_SAME_CURRENT_PASSWORD(404007, "New password be same as current password"),
 		INVALID_VERIFY_PASSWORD(404008, "Invalid verify password"),
+
 		NOT_FOUND_USER_SESSION(404009, "Not found user session"), NOT_FOUND_CUSTOMER(404010, "Not found customer"),
 		INVALID_SUBMIT_DATA(405001, "Invalid submit data"),
 		WRONG_FORMAT(405002, "WRONG FORMAT"),

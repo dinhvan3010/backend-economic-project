@@ -1,16 +1,11 @@
 package net.codejava.request;
 
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class UpdateUserRequest {
-    @Length(min = 5, max = 50)
-    private String password;
-    @Length(min = 5, max = 50)
-    private String confirmPassword;
+ 
     @NotNull
     private String firstName;
     private String lastName;
@@ -20,22 +15,6 @@ public class UpdateUserRequest {
 
     private Date birthday;
 
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
 
     public String getFirstName() {
         return firstName;

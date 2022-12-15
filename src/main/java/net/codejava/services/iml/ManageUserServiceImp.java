@@ -38,8 +38,7 @@ public class ManageUserServiceImp implements IManageUserService {
 	@Autowired
 	CloudinaryService cloudinaryService;
 
-	public void updatePassword(User user, String newPassword) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	public void updatePassword(User user, String newPassword) {;
 		String encodedPassword = passwordEncoder.encode(newPassword);
 		user.setPassword(encodedPassword);
 		userRepo.save(user);
