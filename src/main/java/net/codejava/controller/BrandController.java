@@ -1,6 +1,6 @@
 package net.codejava.controller;
 
-import net.codejava.Model.Brand;
+import net.codejava.model.Brand;
 import net.codejava.services.IListConverter;
 import net.codejava.converter.BrandConverter;
 import net.codejava.dto.BrandRespDTO;

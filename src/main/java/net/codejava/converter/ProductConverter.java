@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import net.codejava.Model.Brand;
-import net.codejava.Model.Category;
-import net.codejava.Model.Product;
-import net.codejava.Model.ProductImage;
+import net.codejava.dto.QuantityBySizeDTO;
+import net.codejava.model.*;
 import net.codejava.dto.ImageRespDTO;
 import net.codejava.dto.ProductRespDTO;
 
@@ -16,16 +14,17 @@ public class ProductConverter {
 		Brand brand = entity.getBrand();
 		Category catelory = entity.getCategory();
 		List<ProductImage> pi = entity.getImages();
+		List<QuantityBySize> qbs = entity.getQuantityBySizes();
 
 		ProductRespDTO productRespDTO = ProductRespDTO.builder().id(entity.getId()).name(entity.getName())
-				.quantity(entity.getQuantity()).unitPrice(entity.getUnitPrice()).description(entity.getDescription())
-				.discount(entity.getDiscount()).imgs(new ArrayList<>()).build();
+				.unitPrice(entity.getUnitPrice()).description(entity.getDescription())
+				.discount(entity.getDiscount()).imgs(new ArrayList<>()).quantityBySizes(new ArrayList<>()).build();
 
 		if (brand != null) {
 			productRespDTO.setBrand_name(brand.getName());
 		}
 		if (catelory != null) {
-			productRespDTO.setCatelory_name(catelory.getName());
+			productRespDTO.setCategory_name(catelory.getName());
 		}
 		if (pi != null) {
 			for (int i = 0; i < pi.size(); i++) {
@@ -35,6 +34,16 @@ public class ProductConverter {
 				ird.setImageUrl(productImage.getUrl());
 
 				productRespDTO.getImgs().add(ird);
+			}
+		}
+		if (qbs != null) {
+			for (int i = 0; i < qbs.size(); i++) {
+				QuantityBySizeDTO qbsDTO = new QuantityBySizeDTO();
+				QuantityBySize quantityBySize = qbs.get(i);
+				qbsDTO.setSize(quantityBySize.getSize());
+				qbsDTO.setQuantity(quantityBySize.getQuantity());
+
+				productRespDTO.getQuantityBySizes().add(qbsDTO);
 			}
 		}
 		return productRespDTO;

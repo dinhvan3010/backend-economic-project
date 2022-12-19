@@ -1,6 +1,6 @@
 package net.codejava.controller;
 
-import net.codejava.Model.Category;
+import net.codejava.model.Category;
 import net.codejava.services.IListConverter;
 import net.codejava.converter.CategoryConverter;
 import net.codejava.dto.CategoryRespDTO;

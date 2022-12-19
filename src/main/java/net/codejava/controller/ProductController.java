@@ -1,5 +1,7 @@
 package net.codejava.controller;
 
+import net.codejava.model.Product;
+import net.codejava.converter.ProductConverter;
 import net.codejava.services.IListConverter;
 import net.codejava.services.IManageProductService;
 import net.codejava.dto.DataPagingResp;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -33,18 +37,29 @@ public class ProductController extends AbstractRestController {
     private IManageProductService productService;
 
     @Autowired
-    IListConverter converter;
+    private IListConverter listConverter;
 
     @GetMapping("/list")
-    public StatusResp getProducts(@RequestParam(required = false) String name,
-                                  @RequestParam ( required = false)int brandId,
+    public StatusResp getProducts(@RequestParam ( required = false)int brandId,
                                   @RequestParam ( required = false) int cateloryId,
+                                  @RequestParam ( required = false) String name,
                                   @RequestParam  int pageNum,
                                   @RequestParam int pageSize) {
         StatusResp resp = new StatusResp();
         Pageable paging = PageRequest.of(pageNum, pageSize);
-        DataPagingResp<ProductRespDTO> dataPagingResp = productService.getProduct(pageNum, pageSize, name, brandId ,cateloryId);
+        DataPagingResp<ProductRespDTO> dataPagingResp = productService.getProduct(pageNum, pageSize,brandId ,cateloryId, name);
         resp.setData(dataPagingResp);
         return resp;
     }
+
+    @GetMapping("/top5Discount")
+    public StatusResp getProductTop5Discount() {
+        StatusResp resp = new StatusResp();
+        List<Product> products = productService.Top5Discount();
+        List<ProductRespDTO> productRespDTOS =listConverter.toListResponse(products, ProductConverter::toRespDTO);
+        resp.setData(productRespDTOS);
+        return resp;
+    }
+
+
 }

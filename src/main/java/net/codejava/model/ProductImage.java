@@ -1,4 +1,4 @@
-package net.codejava.Model;
+package net.codejava.model;
 
 import lombok.*;
 import org.springframework.stereotype.Indexed;

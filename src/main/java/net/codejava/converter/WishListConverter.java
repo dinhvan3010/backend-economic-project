@@ -1,7 +1,7 @@
 package net.codejava.converter;
 
-import net.codejava.Model.Product;
-import net.codejava.Model.WishList;
+import net.codejava.model.Product;
+import net.codejava.model.WishList;
 import net.codejava.dto.ProductRespDTO;
 
 public class WishListConverter {

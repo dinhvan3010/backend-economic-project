@@ -2,14 +2,14 @@ package net.codejava.repository;
 
 import java.util.List;
 
-import net.codejava.Model.WishList;
+import net.codejava.model.WishList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import net.codejava.Model.Product;
-import net.codejava.Model.User;
+import net.codejava.model.Product;
+import net.codejava.model.User;
 
 import javax.transaction.Transactional;
 

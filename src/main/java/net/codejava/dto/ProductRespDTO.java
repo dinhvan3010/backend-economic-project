@@ -2,12 +2,12 @@ package net.codejava.dto;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import net.codejava.model.QuantityBySize;
 
 @Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +17,10 @@ public class ProductRespDTO {
 	private int quantity;
 	private int unitPrice;
 	private String brand_name;
-	private String catelory_name;
+	private String category_name;
 	private String description;
 	private float discount;
 	private List<ImageRespDTO> imgs;
+	private List<QuantityBySizeDTO> quantityBySizes;
 
 }

@@ -1,4 +1,4 @@
-package net.codejava.Model;
+package net.codejava.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,14 +16,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.*;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import net.codejava.enums.UserRole;
-
 @Entity
+@Data
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 @Table(name = "users")
 public class User implements UserDetails {
 	@Id
@@ -46,7 +51,7 @@ public class User implements UserDetails {
 	@Column(updatable = false)
 	private Date createdDate;
 	@OneToMany(mappedBy = "user")
-	private List<Oder> oders;
+	private List<Order> orders;
 	
 	@LastModifiedDate
 	private Date modifiedDate;
@@ -155,12 +160,12 @@ public class User implements UserDetails {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public List<Oder> getOders() {
-		return oders;
+	public List<Order> getOders() {
+		return orders;
 	}
 
-	public void setOders(List<Oder> oders) {
-		this.oders = oders;
+	public void setOders(List<Order> oders) {
+		this.orders = orders;
 	}
 	
 

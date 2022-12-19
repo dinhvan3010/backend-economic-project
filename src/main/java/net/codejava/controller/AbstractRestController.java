@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import net.codejava.Model.User;
+import net.codejava.model.User;
 import net.codejava.services.IManageUserService;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.jwt.JwtTokenUtil;

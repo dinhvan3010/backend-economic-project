@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.codejava.Model.User;
+import net.codejava.model.User;
 import net.codejava.jwt.JwtTokenUtil;
 import net.codejava.request.AuthRequest;
 import net.codejava.response.AuthResponse;

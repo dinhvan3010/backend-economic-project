@@ -3,7 +3,7 @@ package net.codejava.services;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.codejava.Model.User;
+import net.codejava.model.User;
 import net.codejava.dto.UserRespDTO;
 import net.codejava.request.RegisterRequest;
 

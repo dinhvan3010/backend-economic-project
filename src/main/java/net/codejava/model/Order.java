@@ -1,13 +1,15 @@
-package net.codejava.Model;
+package net.codejava.model;
 
-import javax.persistence.CascadeType;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -26,17 +28,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "wish_list")
-public class WishList {
+@Table(name = "orders")
+public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private int id;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+	private Integer id;
+	@Column(updatable = false)
+	private String deliveryName;
+	private String deliveryPhoneNum;
+	private String deliveryAddress;
+	private int paymentMethod;
+	private String notes;
+	private int status;
+	private Date createdDate;
+	@ManyToOne
 	private User user;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_id")
-	private Product product;
+	@OneToMany(mappedBy = "order")
+	private List<OrderDetail> orderDetails;
 }

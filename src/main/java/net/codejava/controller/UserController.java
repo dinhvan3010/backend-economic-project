@@ -1,8 +1,8 @@
 package net.codejava.controller;
 
 import net.bytebuddy.utility.RandomString;
-import net.codejava.Model.Profile;
-import net.codejava.Model.User;
+import net.codejava.model.Profile;
+import net.codejava.model.User;
 import net.codejava.services.CloudinaryService;
 import net.codejava.services.IManageUserService;
 import net.codejava.services.MailService;

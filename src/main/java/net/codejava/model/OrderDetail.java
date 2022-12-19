@@ -1,37 +1,37 @@
-package net.codejava.Model;
+package net.codejava.model;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @Data
+@Getter
+@Setter
 @Entity
-public class Category {
+@Table(name = "order_detail")
+public class OrderDetail {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	private String name;
-
-	@OneToMany(mappedBy = "category")
-	private List<Product> products;
-
-	{
-		products = new ArrayList<>();
-	}
+	private Integer id;
+	private int quantity;
+	@ManyToOne
+	private Order order;
+	@ManyToOne
+	private Product product;
 }

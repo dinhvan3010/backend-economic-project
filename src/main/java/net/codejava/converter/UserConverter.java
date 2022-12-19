@@ -1,7 +1,7 @@
 package net.codejava.converter;
 
-import net.codejava.Model.Profile;
-import net.codejava.Model.User;
+import net.codejava.model.Profile;
+import net.codejava.model.User;
 import net.codejava.dto.UserRespDTO;
 
 public class UserConverter {

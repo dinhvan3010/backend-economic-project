@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import net.codejava.Model.User;
+import net.codejava.model.User;
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {

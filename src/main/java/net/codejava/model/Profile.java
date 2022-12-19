@@ -1,4 +1,4 @@
-package net.codejava.Model;
+package net.codejava.model;
 
 import java.util.Date;
 
@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import lombok.*;
 import net.codejava.enums.Gender;
@@ -20,6 +19,7 @@ import net.codejava.enums.Gender;
 @Getter
 @Setter
 @NoArgsConstructor
+@Builder
 @Table(name = "profiles")
 public class Profile {
 	@Id

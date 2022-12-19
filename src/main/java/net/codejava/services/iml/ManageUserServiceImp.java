@@ -7,13 +7,12 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.codejava.Model.Profile;
-import net.codejava.Model.User;
+import net.codejava.model.Profile;
+import net.codejava.model.User;
 import net.codejava.services.CloudinaryService;
 import net.codejava.services.IManageUserService;
 import net.codejava.converter.UserConverter;

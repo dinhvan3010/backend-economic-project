@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
-import net.codejava.Model.User;
+import net.codejava.model.User;
 import net.codejava.repository.UserRepository;
 
 @DataJpaTest

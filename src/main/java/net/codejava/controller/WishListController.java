@@ -1,8 +1,8 @@
 package net.codejava.controller;
 
-import net.codejava.Model.Product;
-import net.codejava.Model.User;
-import net.codejava.Model.WishList;
+import net.codejava.model.Product;
+import net.codejava.model.User;
+import net.codejava.model.WishList;
 import net.codejava.services.IListConverter;
 import net.codejava.services.IManageProductService;
 import net.codejava.converter.WishListConverter;

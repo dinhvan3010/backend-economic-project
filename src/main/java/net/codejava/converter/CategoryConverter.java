@@ -1,6 +1,6 @@
 package net.codejava.converter;
 
-import net.codejava.Model.Category;
+import net.codejava.model.Category;
 import net.codejava.dto.CategoryRespDTO;
 
 public class CategoryConverter {
