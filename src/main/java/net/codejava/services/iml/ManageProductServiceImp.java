@@ -1,5 +1,6 @@
 package net.codejava.services.iml;
 
+import net.codejava.dto.ProductDetailRespDTO;
 import net.codejava.model.Product;
 import net.codejava.converter.ProductConverter;
 import net.codejava.dto.DataPagingResp;
@@ -34,9 +35,15 @@ public class ManageProductServiceImp implements IManageProductService {
            pageResult = productRepository.findAllByCategory_Id(pageable,categoryId);
         }
         if (brandId == 0 && categoryId == 0 ) {
-            pageResult = productRepository.findByNameContaining(name , pageable);
+//            pageResult = productRepository.findByNameContaining(name , pageable);
+            pageResult = productRepository.findAll(pageable);
         }
         return listConverter.toPageResponse(pageResult, ProductConverter::toRespDTO);
+    }
+
+    @Override
+    public Product getProductDetail(int productId) {
+        return productRepository.findOneById(productId);
     }
 
     @Override

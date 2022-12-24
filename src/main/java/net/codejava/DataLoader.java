@@ -121,7 +121,7 @@ public class DataLoader implements ApplicationRunner {
         List<QuantityBySize> quantityBySizes = new ArrayList<>();
         prosSaved.forEach(e -> {
             for (int i = 36; i < 45; i++) {
-                QuantityBySize quantityBySize = QuantityBySize.builder().Size(i).quantity(faker.number().numberBetween(-1, 100)).product(e).build();
+                QuantityBySize quantityBySize = QuantityBySize.builder().Size(i).quantity(faker.number().numberBetween(0, 100)).product(e).build();
                 quantityBySizes.add(quantityBySize);
             }
             List<QuantityBySize> savedQBSs = quantityBySizeRepository.saveAll(quantityBySizes);
