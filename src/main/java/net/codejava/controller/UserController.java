@@ -7,7 +7,6 @@ import net.codejava.services.CloudinaryService;
 import net.codejava.services.IManageUserService;
 import net.codejava.services.MailService;
 import net.codejava.dto.UserRespDTO;
-import net.codejava.enums.Gender;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.repository.UserRepository;
 import net.codejava.request.ChangePasswordRequest;
@@ -114,7 +113,7 @@ public class UserController extends AbstractRestController {
 			profile.setLastName(request.getLastName());
 		}
 		if (request.getGender() != null) {
-			profile.setGender(Gender.valueOf(request.getGender()));
+			profile.setGender(request.getGender());
 		}
 		try {
 			bi = ImageIO.read(file.getInputStream());

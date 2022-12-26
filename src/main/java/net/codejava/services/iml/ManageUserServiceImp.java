@@ -17,7 +17,6 @@ import net.codejava.services.CloudinaryService;
 import net.codejava.services.IManageUserService;
 import net.codejava.converter.UserConverter;
 import net.codejava.dto.UserRespDTO;
-import net.codejava.enums.Gender;
 import net.codejava.enums.UserRole;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.repository.UserRepository;
@@ -61,7 +60,7 @@ public class ManageUserServiceImp implements IManageUserService {
 			profile.setFirstName(request.getFirstName());
 			profile.setLastName(request.getLastName());
 			profile.setImage(request.getImage());
-			profile.setGender(Gender.valueOf(request.getGender()));
+			profile.setGender(request.getGender());
 			Map result = cloudinaryService.upload(file);
 			profile.setPhotoId(result.get("public_id").toString());
 			profile.setImage((String) result.get("url"));

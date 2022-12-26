@@ -26,12 +26,13 @@ import lombok.Setter;
 @Entity
 @Table(name = "order_detail")
 public class OrderDetail {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	private int quantity;
-	@ManyToOne
-	private Order order;
-	@ManyToOne
-	private Product product;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @ManyToOne
+    private Order order;
+    @ManyToOne
+    private Product product;
+    private int size;
+    private int quantity;
 }

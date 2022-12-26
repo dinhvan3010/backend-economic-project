@@ -11,7 +11,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.*;
-import net.codejava.enums.Gender;
 
 @Entity
 @Data
@@ -33,7 +32,7 @@ public class Profile {
 	@Column
 	private String image;
 	@Column
-	private Gender gender;
+	private String gender;
 	@Column
 	private String photoId;
 	@Column
