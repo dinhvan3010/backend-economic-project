@@ -1,6 +1,11 @@
 package net.codejava.utils;
 
+import net.codejava.model.OrderDetail;
+import net.codejava.model.Product;
+import net.codejava.model.QuantityOrder;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StaticData {
@@ -30,7 +35,8 @@ public class StaticData {
 
 		NEW_PASSWORD_CONFIRMATION_NOT_MATCH(404006, "New password confirmation does not match"),
 		NEW_PASSWORD_SAME_CURRENT_PASSWORD(404007, "New password be same as current password"),
-		NOT_FOUND_USER_SESSION(404009, "Not found user session"), NOT_FOUND_CUSTOMER(404010, "Not found customer"),
+		NOT_FOUND_USER_SESSION(404009, "Not found user session"),
+		NOT_FOUND_CUSTOMER(404010, "Not found customer"),
 		INVALID_SUBMIT_DATA(405001, "Invalid submit data"),
 		WRONG_FORMAT(405002, "WRONG FORMAT"),
 		NOT_FOUND_EMAIL(406001, "Not found email"),
@@ -38,8 +44,9 @@ public class StaticData {
 		PRODUCT_EXIST_FAVORITE(406003, "The product already exists in the wishlist"),
 		PRODUCT_NOT_FOUND(406003, "Product not found"),
 		CART_IS_NULL(406004, "Cart is null"),
-		SIZE_OR_QUANTITY_NOT_FOUND(406005, "Size or quantity not found"),
 		YOUR_ORDERS_IS_NULL(406006, "Your order is null"),
+		ORDER_NOT_FOUND(406007, "Order not found"),
+		CANNOT_CANCEL_ORDER(406008, "Can't cancel order")
 		;
 
 		private final int code;
@@ -57,5 +64,17 @@ public class StaticData {
 		public String getMessage() {
 			return message;
 		}
+	}
+
+	public static double getSubTotal(OrderDetail entity) {
+		List<QuantityOrder> quantityOrders = entity.getQuantityOrders();
+		Product product = entity.getProduct();
+		double subtotal = 0;
+		int totalQuantity = 0;
+		for (int i = 0; i < quantityOrders.size(); i++) {
+			totalQuantity += quantityOrders.get(i).getQuantity();
+		}
+		subtotal = totalQuantity * product.getUnitPrice()*(1- product.getDiscount()/100);
+		return subtotal;
 	}
 }

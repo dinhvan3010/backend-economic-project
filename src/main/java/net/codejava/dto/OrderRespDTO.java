@@ -26,6 +26,5 @@ public class OrderRespDTO {
 	private String notes;
 	private int status;
 	private Date createdDate;
-
-
+	private double total;
 }

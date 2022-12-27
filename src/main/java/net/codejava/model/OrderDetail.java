@@ -1,12 +1,7 @@
 package net.codejava.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,6 +30,6 @@ public class OrderDetail {
     private Order order;
     @ManyToOne
     private Product product;
-    private int size;
-    private int quantity;
+    @OneToMany(mappedBy = "orderDetail")
+    List<QuantityOrder> quantityOrders;
 }

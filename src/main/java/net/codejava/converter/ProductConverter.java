@@ -1,13 +1,12 @@
 package net.codejava.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-import net.codejava.dto.QuantityBySizeDTO;
-import net.codejava.model.*;
 import net.codejava.dto.ImageRespDTO;
 import net.codejava.dto.ProductRespDTO;
+import net.codejava.model.Product;
+import net.codejava.model.ProductImage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductConverter {
 	public static ProductRespDTO toRespDTO(Product entity) {

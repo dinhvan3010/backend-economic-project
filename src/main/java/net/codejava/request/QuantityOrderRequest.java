@@ -7,7 +7,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class QuantitySize {
+public class QuantityOrderRequest {
     private int size;
     private int quantity;
 

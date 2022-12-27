@@ -1,9 +1,8 @@
 package net.codejava.dto;
 
-import java.util.List;
-
 import lombok.*;
-import net.codejava.model.QuantityBySize;
+
+import java.util.List;
 
 @Data
 @Getter

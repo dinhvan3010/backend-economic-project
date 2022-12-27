@@ -1,18 +1,15 @@
 package net.codejava.controller;
 
+import net.codejava.converter.ProductConverter;
 import net.codejava.converter.ProductDetailConverter;
+import net.codejava.dto.DataPagingResp;
 import net.codejava.dto.ProductDetailRespDTO;
+import net.codejava.dto.ProductRespDTO;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.model.Product;
-import net.codejava.converter.ProductConverter;
+import net.codejava.response.StatusResp;
 import net.codejava.services.IListConverter;
 import net.codejava.services.IManageProductService;
-import net.codejava.dto.DataPagingResp;
-import net.codejava.dto.ProductRespDTO;
-import net.codejava.repository.BrandRepository;
-import net.codejava.repository.ProductRepository;
-import net.codejava.repository.UserRepository;
-import net.codejava.response.StatusResp;
 import net.codejava.utils.StaticData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.codejava.model.ProductImage;
+import net.codejava.model.QuantityOrder;
 
 import java.util.List;
 
@@ -18,9 +18,8 @@ public class OrderDetailRespDTO {
     private String description;
     private float discount;
     private List<ImageRespDTO> imgs;
-    private  int quantity;
-    private  int size;
-    private int subTotal;
+    List<QuantityOrder> quantityOrders;
+    private double subTotal;
 
 
 }

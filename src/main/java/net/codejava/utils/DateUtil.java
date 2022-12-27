@@ -1,5 +1,8 @@
 package net.codejava.utils;
 
+import net.codejava.model.OrderDetail;
+import net.codejava.model.Product;
+import net.codejava.model.QuantityOrder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 
@@ -40,6 +44,8 @@ public class DateUtil {
 
     public static final TimeZone VN_GMT_7 = TimeZone.getTimeZone("GMT+7");
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
+
+
 
     public static String getDateByFormat(String dateFormat) {
         Calendar cal = Calendar.getInstance();

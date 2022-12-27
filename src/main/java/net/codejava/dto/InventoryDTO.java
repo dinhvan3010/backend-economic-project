@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuantityBySizeDTO {
+public class InventoryDTO {
 
     private int size;
     private int quantity;

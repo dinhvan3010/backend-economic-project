@@ -19,6 +19,6 @@ public class ProductDetailRespDTO {
 	private String description;
 	private float discount;
 	private List<ImageRespDTO> imgs;
-	private List<QuantityBySizeDTO> quantityBySizes;
+	private List<InventoryDTO> inventoryDTOS;
 
 }

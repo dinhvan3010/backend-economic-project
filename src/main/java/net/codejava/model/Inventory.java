@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
-public class QuantityBySize {
+public class Inventory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column

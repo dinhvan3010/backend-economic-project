@@ -35,8 +35,6 @@ public class UserController extends AbstractRestController {
 	@Autowired
 	IManageUserService userService;
 	@Autowired
-	UserRepository userRepo;
-	@Autowired
 	MailService mail;
 	@Autowired
 	CloudinaryService cloudinaryService;
@@ -103,6 +101,7 @@ public class UserController extends AbstractRestController {
 		checkBindingResult(bindingResult);
 		StatusResp resp = new StatusResp();
 		BufferedImage bi;
+		Map result = null;
 		User userSession = getUserSession();
 		User user = userRepo.getById(userSession.getId());
 		Profile profile = user.getProfile();
@@ -119,7 +118,7 @@ public class UserController extends AbstractRestController {
 			bi = ImageIO.read(file.getInputStream());
 			if (bi != null) {
 				cloudinaryService.delete(profile.getPhotoId());
-				Map result = cloudinaryService.upload(file);
+				 result = cloudinaryService.upload(file);
 				user.getProfile().setImage((String) result.get("url"));
 				user.getProfile().setPhotoId(result.get("public_id").toString());
 			}

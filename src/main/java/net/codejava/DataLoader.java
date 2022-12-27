@@ -34,7 +34,7 @@ public class DataLoader implements ApplicationRunner {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    QuantityBySizeRepository quantityBySizeRepository;
+    InventoryRepository inventoryRepository;
     @Autowired
     PasswordEncoder pe;
 
@@ -118,13 +118,13 @@ public class DataLoader implements ApplicationRunner {
         });
         log.info("==================== FAKE DATA ProductImage : DONE ==================");
 
-        List<QuantityBySize> quantityBySizes = new ArrayList<>();
+        List<Inventory> inventoryList = new ArrayList<>();
         prosSaved.forEach(e -> {
             for (int i = 36; i < 45; i++) {
-                QuantityBySize quantityBySize = QuantityBySize.builder().Size(i).quantity(faker.number().numberBetween(0, 100)).product(e).build();
-                quantityBySizes.add(quantityBySize);
+                Inventory inventory = Inventory.builder().Size(i).quantity(faker.number().numberBetween(0, 100)).product(e).build();
+                inventoryList.add(inventory);
             }
-            List<QuantityBySize> savedQBSs = quantityBySizeRepository.saveAll(quantityBySizes);
+            List<Inventory> savedQBSs = inventoryRepository.saveAll(inventoryList);
         });
         log.info("==================== FAKE DATA QuantityBySize : DONE ==================");
         log.info("==================== FAKE DATA END ==================");

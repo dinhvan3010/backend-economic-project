@@ -57,7 +57,7 @@ public class WishListController extends AbstractRestController {
             throw new MyAppException(StaticData.ERROR_CODE.PRODUCT_NOT_FOUND.getMessage(), StaticData.ERROR_CODE.PRODUCT_NOT_FOUND.getCode());
         }
         Boolean check = wishListRepository.existsByProductAndUser(product, userRepository.getById(user.getId()));
-        if (check == true) {
+        if (Boolean.TRUE.equals(check)) {
             throw new MyAppException(StaticData.ERROR_CODE.PRODUCT_EXIST_FAVORITE.getMessage(), StaticData.ERROR_CODE.PRODUCT_EXIST_FAVORITE.getCode());
         }
         wishList.setProduct(product);
@@ -72,7 +72,7 @@ public class WishListController extends AbstractRestController {
         User user = getUserSession();
         Product product = productRepository.findOneById(productId);
         Boolean check = wishListRepository.existsByProductAndUser(product, userRepository.getById(user.getId()));
-        if (check == false) {
+        if (Boolean.FALSE.equals(check)) {
             throw new MyAppException(StaticData.ERROR_CODE.PRODUCT_NOT_FOUND.getMessage(), StaticData.ERROR_CODE.PRODUCT_NOT_FOUND.getCode());
         }
         WishList wishList = wishListRepository.findAllByProduct_IdAndUser_Id(productId, user.getId());
