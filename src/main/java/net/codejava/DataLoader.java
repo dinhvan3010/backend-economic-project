@@ -7,6 +7,7 @@ import net.codejava.model.*;
 import net.codejava.enums.UserRole;
 import net.codejava.repository.*;
 import net.codejava.utils.DateUtil;
+import net.codejava.utils.StaticData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -22,7 +23,6 @@ import java.util.Locale;
 @Slf4j
 public class DataLoader implements ApplicationRunner {
 
-
     @Autowired
     private ProductRepository prodRepo;
     @Autowired
@@ -35,6 +35,9 @@ public class DataLoader implements ApplicationRunner {
     UserRepository userRepository;
     @Autowired
     InventoryRepository inventoryRepository;
+
+    @Autowired
+    ProfileRepository profileRepository;
     @Autowired
     PasswordEncoder pe;
 
@@ -43,21 +46,32 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("==================== FAKE DATA GENERATOR ==================");
 
-        User userAdmin = new User();
+
         String username = "cuongqn2023@gmail.com";
         String password = "admin";
         if (!userRepository.existsByEmail(username)) {
+
+            Faker faker = new Faker(new Locale("vi-VN"));
+
+            Profile profileAdmin = new Profile();
+            profileAdmin.setFirstName("Nguyen");
+            profileAdmin.setLastName("The Cuong");
+            profileAdmin.setImage("https://www.dungplus.com/wp-content/uploads/2019/12/girl-xinh-1-480x600.jpg");
+            profileAdmin.setBirthday(faker.date().birthday());
+            profileAdmin.setGender(StaticData.Gender.MALE);
+
+            User userAdmin = new User();
             userAdmin.setEmail(username);
             userAdmin.setPassword(pe.encode(password));
             userAdmin.setRole(UserRole.ADMIN);
             userAdmin.setEnabled(true);
             userAdmin.setCreatedDate(DateUtil.now());
+            userAdmin.setProfile(profileAdmin);
             userRepository.save(userAdmin);
 
 
         if (prodRepo.findAll().size() > 0) return;
 
-        Faker faker = new Faker(new Locale("vi-VN"));
 
         List<User> users = new ArrayList<>();
 
