@@ -10,7 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Builder
-@Data
+@Getter
+@Setter
 @Entity
 public class Inventory {
 	@Id

@@ -42,8 +42,11 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 		http.authorizeRequests()
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/api/auth/login","/api/user/forgot_password","/api/user/register", "/api/user/checkExistEmail", "/send-notification").permitAll()
 				.anyRequest().authenticated();
+
+
 		
         http.exceptionHandling()
                 .authenticationEntryPoint(

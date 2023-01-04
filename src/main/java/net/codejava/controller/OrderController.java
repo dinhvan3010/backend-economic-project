@@ -5,25 +5,22 @@ import net.codejava.converter.OrderDetailConverter;
 import net.codejava.dto.OrderDetailRespDTO;
 import net.codejava.dto.OrderRespDTO;
 import net.codejava.exceptions.MyAppException;
-import net.codejava.model.Order;
-import net.codejava.model.OrderDetail;
-import net.codejava.model.QuantityOrder;
-import net.codejava.model.User;
-import net.codejava.repository.OrderDetailRepository;
-import net.codejava.repository.OrderRepository;
-import net.codejava.repository.ProductRepository;
-import net.codejava.repository.QuantityOrderRepository;
+import net.codejava.model.*;
+import net.codejava.repository.*;
 import net.codejava.request.OrderRequest;
 import net.codejava.request.ProductOrder;
 import net.codejava.response.StatusResp;
 import net.codejava.services.IListConverter;
+import net.codejava.services.IManageOrderService;
 import net.codejava.utils.DateUtil;
 import net.codejava.utils.StaticData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/order")
@@ -40,6 +37,9 @@ public class OrderController extends AbstractRestController {
 
     @Autowired
     QuantityOrderRepository quantityOrderRepository;
+
+    @Autowired
+    IManageOrderService manageOrderService;
 
     @Autowired
     IListConverter listConverter;
@@ -59,27 +59,47 @@ public class OrderController extends AbstractRestController {
         User user = getUserSession();
         order.setUser(user);
 
-        orderRepository.save(order);
         List<ProductOrder> productOrderList = request.getProductOrdersList();
         List<OrderDetail> orderDetails = new ArrayList<>();
         if (productOrderList.isEmpty()) {
             throw new MyAppException(StaticData.ERROR_CODE.CART_IS_NULL.getMessage(), StaticData.ERROR_CODE.CART_IS_NULL.getCode());
         }
+        List<QuantityOrder> quantityOrderList = null;
         for (int i = 0; i < productOrderList.size(); i++) {
+            List<Inventory> inventories = productRepository.getById(productOrderList.get(i).getProductId()).getInventories();
+            // convert list to Map
+            Map<Integer, Integer> map = new HashMap<>();
+            for (Inventory inventory : inventories) {
+                map.put(inventory.getSize(), inventory.getQuantity());
+            }
             ProductOrder productOrder = productOrderList.get(i);
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrder(order);
-            orderDetail.setProduct(productRepository.getById(productOrder.getProductId()));
+            Product product = productRepository.getById(productOrder.getProductId());
+            orderDetail.setProduct(product);
             orderDetails.add(orderDetail);
             List<QuantityOrder> quantityOrders = productOrder.getQuantityOrder();
+            quantityOrderList = new ArrayList<>();
             for (int j = 0; j < quantityOrders.size(); j++) {
                 QuantityOrder quantityOrder = new QuantityOrder();
+                int size = quantityOrders.get(j).getSize();
+                int quantity = quantityOrders.get(j).getQuantity();
+                if(map.get(size) < quantity){
+                    throw new MyAppException(StaticData.ERROR_CODE.NOT_ENOUGH_QUANTITY.getMessage(), StaticData.ERROR_CODE.NOT_ENOUGH_QUANTITY.getCode());
+                }
+                for (int k = 0; k <inventories.size() ; k++) {
+                    if(inventories.get(k).getSize() == quantityOrders.get(j).getSize()){
+                        inventories.get(k).setQuantity(inventories.get(k).getQuantity() - quantityOrders.get(j).getQuantity());
+                    }
+                }
                 quantityOrder.setOrderDetail(orderDetail);
-                quantityOrder.setSize(quantityOrders.get(j).getSize());
-                quantityOrder.setQuantity(quantityOrders.get(j).getQuantity());
-                quantityOrderRepository.save(quantityOrder);
+                quantityOrder.setSize(size);
+                quantityOrder.setQuantity(quantity);
+                quantityOrderList.add(quantityOrder);
             }
+            quantityOrderRepository.saveAll(quantityOrderList);
         }
+        orderRepository.save(order);
         orderDetailRepository.saveAll(orderDetails);
         return resp;
     }
@@ -88,7 +108,7 @@ public class OrderController extends AbstractRestController {
     public StatusResp list() {
         StatusResp resp = new StatusResp();
         User user = getUserSession();
-        List<Order> orders = orderRepository.getByUserId(user.getId());
+        List<Order> orders = manageOrderService.getOrders(user.getId());
         if (orders.isEmpty()) {
             throw new MyAppException(StaticData.ERROR_CODE.YOUR_ORDERS_IS_NULL.getMessage(), StaticData.ERROR_CODE.YOUR_ORDERS_IS_NULL.getCode());
         }
@@ -101,7 +121,7 @@ public class OrderController extends AbstractRestController {
     @GetMapping("/detail")
     public StatusResp orderDetail(@RequestParam int orderId) {
         StatusResp resp = new StatusResp();
-        List<OrderDetail> orderDetails = orderDetailRepository.getByOrder_Id(orderId);
+        List<OrderDetail> orderDetails =manageOrderService.getOrderDetail(orderId);
         if(orderDetails.isEmpty()){
             throw new MyAppException(StaticData.ERROR_CODE.ORDER_NOT_FOUND.getMessage(), StaticData.ERROR_CODE.ORDER_NOT_FOUND.getCode());
         }

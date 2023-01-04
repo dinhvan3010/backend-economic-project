@@ -26,10 +26,10 @@ public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Order order;
     @ManyToOne
     private Product product;
-    @OneToMany(mappedBy = "orderDetail")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderDetail")
     List<QuantityOrder> quantityOrders;
 }

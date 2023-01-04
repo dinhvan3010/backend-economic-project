@@ -46,7 +46,8 @@ public class StaticData {
 		CART_IS_NULL(406004, "Cart is null"),
 		YOUR_ORDERS_IS_NULL(406006, "Your order is null"),
 		ORDER_NOT_FOUND(406007, "Order not found"),
-		CANNOT_CANCEL_ORDER(406008, "Can't cancel order")
+		CANNOT_CANCEL_ORDER(406008, "Can't cancel order"),
+		NOT_ENOUGH_QUANTITY(406009, "not enough quantity")
 		;
 
 		private final int code;

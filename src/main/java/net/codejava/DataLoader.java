@@ -44,13 +44,11 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("==================== FAKE DATA GENERATOR ==================");
-
 
         String username = "cuongqn2023@gmail.com";
         String password = "admin";
         if (!userRepository.existsByEmail(username)) {
-
+            log.info("==================== FAKE DATA GENERATOR ==================");
             Faker faker = new Faker(new Locale("vi-VN"));
 
             Profile profileAdmin = new Profile();

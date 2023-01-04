@@ -18,4 +18,6 @@ public interface IManageProductService {
 
 	List<Product> Top5Discount();
 
+	void deleteProduct(int productId);
+
 }

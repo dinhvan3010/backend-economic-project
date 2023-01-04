@@ -51,4 +51,9 @@ public class ManageProductServiceImp implements IManageProductService {
         return productRepository.findTop5ByOrderByDiscountDesc();
     }
 
+    @Override
+    public void deleteProduct(int productId) {
+         productRepository.deleteById(productId);
+    }
+
 }
