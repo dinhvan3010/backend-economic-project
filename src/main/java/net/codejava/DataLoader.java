@@ -76,7 +76,8 @@ public class DataLoader implements ApplicationRunner {
         for (int i = 0; i < 10; i++) {
             Profile profile = Profile.builder().firstName(faker.name().firstName()).lastName(faker.name().lastName()).image(faker.avatar().image()).birthday(faker.date().birthday()).build();
 
-            User user = User.builder().email(faker.internet().emailAddress()).password(pe.encode(faker.internet().password())).profile(profile).build();
+            User user = User.builder().email(faker.internet().emailAddress()).password(pe.encode(faker.internet().password())).
+                    role(UserRole.USER).isEnabled(true).createdDate(DateUtil.now()).profile(profile).build();
             users.add(user);
         }
         List<User> savedUsers = userRepository.saveAll(users);

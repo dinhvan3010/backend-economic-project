@@ -1,10 +1,9 @@
 package net.codejava.services.iml;
 
-import net.codejava.dto.ProductDetailRespDTO;
-import net.codejava.model.Product;
 import net.codejava.converter.ProductConverter;
 import net.codejava.dto.DataPagingResp;
 import net.codejava.dto.ProductRespDTO;
+import net.codejava.model.Product;
 import net.codejava.repository.ProductRepository;
 import net.codejava.services.IListConverter;
 import net.codejava.services.IManageProductService;
@@ -24,19 +23,21 @@ public class ManageProductServiceImp implements IManageProductService {
     private IListConverter listConverter;
 
     @Override
-    public DataPagingResp<ProductRespDTO> getProduct(int num, int size, int brandId, int categoryId, String name) {
+    public DataPagingResp<ProductRespDTO> getProduct(int num, int size, Integer brandId, Integer categoryId, String name) {
 
         Page<Product> pageResult = null;
         PageRequest pageable = PageRequest.of(num, size);
-        if (categoryId == 0 && brandId != 0) {
-           pageResult = productRepository.findAllByBrand_Id(pageable,brandId);
+        if (categoryId == null && brandId != null) {
+            pageResult = productRepository.findAllByBrandIdAndNameContaining(brandId, name, pageable);
         }
-        if (brandId == 0 && categoryId != 0 ) {
-           pageResult = productRepository.findAllByCategory_Id(pageable,categoryId);
+        if (categoryId != null && brandId == null) {
+            pageResult = productRepository.findAllByCategoryIdAndNameContaining(categoryId, name, pageable);
         }
-        if (brandId == 0 && categoryId == 0 ) {
-//            pageResult = productRepository.findByNameContaining(name , pageable);
-            pageResult = productRepository.findAll(pageable);
+        if (categoryId != null && brandId != null) {
+            pageResult = productRepository.findAllByCategoryIdAndBrandIdAndNameContaining(brandId, categoryId, name, pageable);
+        }
+        if (categoryId == null && brandId == null) {
+            pageResult = productRepository.findByNameContaining(name, pageable);
         }
         return listConverter.toPageResponse(pageResult, ProductConverter::toRespDTO);
     }
@@ -53,7 +54,7 @@ public class ManageProductServiceImp implements IManageProductService {
 
     @Override
     public void deleteProduct(int productId) {
-         productRepository.deleteById(productId);
+        productRepository.deleteById(productId);
     }
 
 }

@@ -8,7 +8,11 @@ import java.util.List;
 @Service
 public interface IManageBrandService {
 
-	List<Brand> getListBrand();
+    List<Brand> getListBrand();
 
-	void deleteBrand(int brandId);
+    void deleteBrand(int brandId);
+
+    Brand getDetail(int brandId);
+
+    Brand findById(int brandId);
 }

@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.codejava.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,10 @@ import net.codejava.model.User;
 public class JwtTokenFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtTokenUtil jwtUtil;
+
+	@Autowired
+	UserRepository userRepository;
+
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, 
@@ -63,7 +68,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		UserDetails userDetails = getUserDetails(token);
 
 		UsernamePasswordAuthenticationToken 
-			authentication = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+			authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
 		authentication.setDetails(
 				new WebAuthenticationDetailsSource().buildDetails(request));
@@ -72,12 +77,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	}
 
 	private UserDetails getUserDetails(String token) {
-		User userDetails = new User();
 		String[] jwtSubject = jwtUtil.getSubject(token).split(",");
-
-		userDetails.setId(Integer.parseInt(jwtSubject[0]));
-		userDetails.setEmail(jwtSubject[1]);
-
-		return userDetails;
+		int id = Integer.parseInt(jwtSubject[0]);
+		User user = userRepository.getById(id);
+		return user;
 	}
 }

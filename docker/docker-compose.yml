@@ -1,0 +1,33 @@
+version: '3.5'
+services:
+  database:
+    image: mysql:5.6
+    container_name: mysqlContainer
+    restart: always
+    ports:
+      - 13306:3306
+    networks:
+      - network
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', "--max_connections=10000" ]
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+    volumes:
+      - ../../mysql:/var/lib/mysql
+
+  economic-server:
+    build:
+      context: ./docker-economic-backend
+      dockerfile: Dockerfile
+    container_name: economicServerContainer
+    depends_on:
+      - database
+    restart: always
+    ports:
+        - 8088:8080
+    networks:
+      - network
+
+networks:
+  network:
+    name: economic
+#    external: true

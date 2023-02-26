@@ -1,69 +1,50 @@
 package net.codejava.services.iml;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import net.codejava.model.Profile;
-import net.codejava.model.User;
-import net.codejava.services.CloudinaryService;
-import net.codejava.services.IManageUserService;
 import net.codejava.converter.UserConverter;
 import net.codejava.dto.UserRespDTO;
 import net.codejava.enums.UserRole;
-import net.codejava.exceptions.MyAppException;
+import net.codejava.model.Profile;
+import net.codejava.model.User;
 import net.codejava.repository.UserRepository;
 import net.codejava.request.RegisterRequest;
+import net.codejava.request.UpdateUserRequest;
+import net.codejava.services.IManageUserService;
 import net.codejava.utils.DateUtil;
-import net.codejava.utils.StaticData;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ManageUserServiceImp implements IManageUserService {
 
 	@Autowired
-	UserRepository userRepo;
+	UserRepository userRepository;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	@Autowired
-	CloudinaryService cloudinaryService;
 
 	public void updatePassword(User user, String newPassword) {;
 		String encodedPassword = passwordEncoder.encode(newPassword);
 		user.setPassword(encodedPassword);
-		userRepo.save(user);
+		userRepository.save(user);
 	}
 
 	public User findUserByEmail(String email) {
-		User user = userRepo.findOneByEmail(email);
+		User user = userRepository.findOneByEmail(email);
 		return user;
 	}
 
 	@Override
-	public void registerUser(RegisterRequest request, MultipartFile file) {
-		BufferedImage bi;
-		try {
-			bi = ImageIO.read(file.getInputStream());
-			if (bi == null) {
-				throw new MyAppException(StaticData.ERROR_CODE.WRONG_FORMAT.getMessage(),
-						StaticData.ERROR_CODE.WRONG_FORMAT.getCode());
-			}
+	public void registerUser(RegisterRequest request) {
+
 			Profile profile = new Profile();
 			profile.setFirstName(request.getFirstName());
 			profile.setLastName(request.getLastName());
 			profile.setImage(request.getImage());
 			profile.setGender(request.getGender());
-			Map result = cloudinaryService.upload(file);
-			profile.setPhotoId(result.get("public_id").toString());
-			profile.setImage((String) result.get("url"));
 			User user = new User();
 			user.setEmail(request.getEmail());
 			user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -71,24 +52,57 @@ public class ManageUserServiceImp implements IManageUserService {
 			user.setRole(UserRole.USER);
 			user.setCreatedDate(DateUtil.now());
 			user.setEnabled(true);
-			userRepo.save(user);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		userRepository.save(user);
 	}
 
 	@Override
 	public UserRespDTO getUserProfile(int id) {
-		User user = userRepo.getById(id);
+		User user = userRepository.getById(id);
 		UserRespDTO userRespDTO = UserConverter.toRespDTO(user);
 		return userRespDTO;
 	}
 
 	@Override
 	public void changePassword(int id, String password) {
-		User user = userRepo.getById(id);
+		User user = userRepository.getById(id);
 		user.setPassword(passwordEncoder.encode(password));
-		userRepo.save(user);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void updateUserInfo(User user,  UpdateUserRequest request ) {
+		Profile profile = user.getProfile();
+		if (request.getFirstName() != null) {
+			profile.setFirstName(request.getFirstName());
+		}
+		if (request.getLastName() != null) {
+			profile.setLastName(request.getLastName());
+		}
+		if (request.getGender() != null) {
+			profile.setGender(request.getGender());
+		}
+		if (request.getImage() != null) {
+			profile.setImage(request.getImage());
+		}
+		if (request.getBirthday() != null) {
+			profile.setBirthday(request.getBirthday());
+		}
+		userRepository.save(user);
+	}
+
+	@Override
+	public Boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
+	@Override
+	public List<User> getAllUser() {
+		return userRepository.findAll();
+	}
+
+	@Override
+	public User findUserById(int userId) {
+		return userRepository.findOneById(userId);
 	}
 
 }

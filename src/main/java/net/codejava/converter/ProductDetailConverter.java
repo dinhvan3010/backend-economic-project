@@ -29,7 +29,6 @@ public class ProductDetailConverter {
             for (int i = 0; i < pi.size(); i++) {
                 ImageRespDTO ird = new ImageRespDTO();
                 ProductImage productImage = pi.get(i);
-                ird.setImageAlt(productImage.getAlt());
                 ird.setImageUrl(productImage.getUrl());
                 productDetailRespDTO.getImgs().add(ird);
             }
@@ -40,7 +39,6 @@ public class ProductDetailConverter {
                 Inventory quantityBySize = inventoryList.get(i);
                 inventoryDTO.setSize(quantityBySize.getSize());
                 inventoryDTO.setQuantity(quantityBySize.getQuantity());
-
                 productDetailRespDTO.getInventoryDTOS().add(inventoryDTO);
             }
         }

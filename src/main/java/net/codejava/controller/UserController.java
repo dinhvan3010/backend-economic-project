@@ -1,32 +1,26 @@
 package net.codejava.controller;
 
 import net.bytebuddy.utility.RandomString;
-import net.codejava.model.Profile;
-import net.codejava.model.User;
-import net.codejava.services.CloudinaryService;
-import net.codejava.services.IManageUserService;
-import net.codejava.services.MailService;
 import net.codejava.dto.UserRespDTO;
 import net.codejava.exceptions.MyAppException;
-import net.codejava.repository.UserRepository;
+import net.codejava.model.Profile;
+import net.codejava.model.User;
 import net.codejava.request.ChangePasswordRequest;
 import net.codejava.request.ForgetPasswordRequest;
 import net.codejava.request.RegisterRequest;
 import net.codejava.request.UpdateUserRequest;
 import net.codejava.response.StatusResp;
+import net.codejava.services.IManageUserService;
+import net.codejava.services.MailService;
 import net.codejava.utils.StaticData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.imageio.ImageIO;
 import javax.validation.Valid;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -36,8 +30,6 @@ public class UserController extends AbstractRestController {
 	IManageUserService userService;
 	@Autowired
 	MailService mail;
-	@Autowired
-	CloudinaryService cloudinaryService;
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
@@ -72,7 +64,7 @@ public class UserController extends AbstractRestController {
 			throw new MyAppException(StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getMessage(),
 					StaticData.ERROR_CODE.CUSTOMER_EXIST_EMAIL.getCode());
 		}
-		userService.registerUser(request, file);
+		userService.registerUser(request);
 		return statusResp;
 	}
 
@@ -89,43 +81,20 @@ public class UserController extends AbstractRestController {
 	@GetMapping("/whoami")
 	public StatusResp whoami() {
 		StatusResp resp = new StatusResp();
-		User user = getUserSession();
+		User userSession = getUserSession();;
+		User user = userRepo.getById(userSession.getId());
 		UserRespDTO userRespDTO = userService.getUserProfile(user.getId());
 		resp.setData(userRespDTO);
 		return resp;
 	}
 
-	@PutMapping(value = "/update", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
-	public StatusResp updateUser(@RequestPart("user") @Valid UpdateUserRequest request, @RequestPart MultipartFile file,
-			BindingResult bindingResult) {
+	@PutMapping(value = "/update")
+	public StatusResp updateUser(@RequestPart("user") @Valid @RequestBody UpdateUserRequest request,  BindingResult bindingResult) {
 		checkBindingResult(bindingResult);
 		StatusResp resp = new StatusResp();
-		BufferedImage bi;
-		Map result = null;
-		User userSession = getUserSession();
+		User userSession = getUserSession();;
 		User user = userRepo.getById(userSession.getId());
-		Profile profile = user.getProfile();
-		if (request.getFirstName() != null) {
-			profile.setFirstName(request.getFirstName());
-		}
-		if (request.getLastName() != null) {
-			profile.setLastName(request.getLastName());
-		}
-		if (request.getGender() != null) {
-			profile.setGender(request.getGender());
-		}
-		try {
-			bi = ImageIO.read(file.getInputStream());
-			if (bi != null) {
-				cloudinaryService.delete(profile.getPhotoId());
-				 result = cloudinaryService.upload(file);
-				user.getProfile().setImage((String) result.get("url"));
-				user.getProfile().setPhotoId(result.get("public_id").toString());
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		userRepo.save(user);
+		userService.updateUserInfo(user, request);
 		return resp;
 	}
 
@@ -142,7 +111,6 @@ public class UserController extends AbstractRestController {
 			throw new MyAppException(StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getMessage(),
 					StaticData.ERROR_CODE.NEW_PASSWORD_CONFIRMATION_NOT_MATCH.getCode());
 		}
-
 		StatusResp resp = new StatusResp();
 		userService.changePassword(userSession.getId(), request.getNewPassword());
 		return resp;

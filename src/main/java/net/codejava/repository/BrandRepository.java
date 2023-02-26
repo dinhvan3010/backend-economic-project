@@ -8,4 +8,5 @@ import net.codejava.model.Brand;
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Integer> {
 	Brand findOneById(int id);
+    boolean existsByName(String name);
 }

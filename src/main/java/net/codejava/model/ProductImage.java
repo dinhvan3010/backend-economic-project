@@ -13,16 +13,14 @@ import javax.persistence.*;
 @Indexed
 @Entity
 public class ProductImage {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-	@ManyToOne
-	private Product product;
+    @ManyToOne
+    private Product product;
 
-	private String alt;
+    private String url;
 
-	private String url;
-	
-	private String pid;
+    private String pid;
 }

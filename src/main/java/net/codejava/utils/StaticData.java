@@ -47,7 +47,12 @@ public class StaticData {
 		YOUR_ORDERS_IS_NULL(406006, "Your order is null"),
 		ORDER_NOT_FOUND(406007, "Order not found"),
 		CANNOT_CANCEL_ORDER(406008, "Can't cancel order"),
-		NOT_ENOUGH_QUANTITY(406009, "not enough quantity")
+		NOT_ENOUGH_QUANTITY(406009, "not enough quantity"),
+		BRAND_NOT_FOUND(406010, "Brand not found"),
+		USER_NOT_FOUND(406011, "User not found"),
+		BRAND_EXISTED(406012, "Brand Exist"),
+		CATEGORY_NOT_FOUND (40613, "Category not found"),
+		CATEGORY_NAME_EXISTED(406012, "Category Name Exist"),
 		;
 
 		private final int code;

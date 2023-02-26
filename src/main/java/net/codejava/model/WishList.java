@@ -30,13 +30,11 @@ import lombok.Setter;
 public class WishList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
 	private int id;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id")
+
+	@OneToOne
 	private User user;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_id")
+	@OneToOne
 	private Product product;
 }

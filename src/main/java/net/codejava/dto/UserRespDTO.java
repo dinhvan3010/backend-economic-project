@@ -20,5 +20,6 @@ public class UserRespDTO {
 	private String gender;
 	private String birthday;
 	private String createdDate;
+	private boolean isEnable;
 
 }

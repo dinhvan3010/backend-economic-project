@@ -20,5 +20,4 @@ public class ProductDetailRespDTO {
 	private float discount;
 	private List<ImageRespDTO> imgs;
 	private List<InventoryDTO> inventoryDTOS;
-
 }

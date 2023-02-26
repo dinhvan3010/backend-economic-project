@@ -10,15 +10,13 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderDetailRespDTO {
     private String productName;
     private int unitPrice;
     private String description;
     private float discount;
     private List<ImageRespDTO> imgs;
-    List<QuantityOrder> quantityOrders;
+    List<QuantityOrderRespDTO> quantityOrders;
     private double subTotal;
 
 

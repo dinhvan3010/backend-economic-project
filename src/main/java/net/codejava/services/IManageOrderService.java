@@ -8,7 +8,18 @@ import java.util.List;
 
 @Service
 public interface IManageOrderService {
-    List<Order> getOrders(int userId);
 
-    List<OrderDetail>  getOrderDetail(int orderId);
+    List<Order> getAllOrder();
+
+    List<Order> getOrdersByUerId(int userId);
+
+    List<OrderDetail> getOrderDetail(int orderId);
+
+    Order getOrderById(int orderId);
+
+    Order getOrderByIdAndUserId(int orderId, int userId);
+
+    void createOrder(Order order);
+
+
 }

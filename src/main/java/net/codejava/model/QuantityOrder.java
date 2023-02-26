@@ -20,8 +20,9 @@ public class QuantityOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
+    @ManyToOne
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
     private OrderDetail orderDetail;
 
     private int size;

@@ -19,13 +19,33 @@ public class ManageOrderServiceImp implements IManageOrderService {
     OrderDetailRepository orderDetailRepository;
 
     @Override
-    public List<Order> getOrders(int userId) {
+    public List<Order> getAllOrder() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public List<Order> getOrdersByUerId(int userId) {
         return orderRepository.getByUserId(userId);
     }
 
     @Override
     public List<OrderDetail> getOrderDetail(int orderId) {
-        List<OrderDetail> orderDetails = orderDetailRepository.getByOrder_Id(orderId);
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
         return orderDetails;
+    }
+
+    @Override
+    public Order getOrderById(int orderId) {
+        return orderRepository.findOneById(orderId);
+    }
+
+    @Override
+    public Order getOrderByIdAndUserId(int orderId, int userId) {
+        return orderRepository.getByIdAndUserId(orderId, userId);
+    }
+
+    @Override
+    public void createOrder(Order order) {
+        orderRepository.save(order);
     }
 }

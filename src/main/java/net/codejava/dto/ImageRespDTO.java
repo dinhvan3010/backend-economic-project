@@ -13,5 +13,4 @@ public class ImageRespDTO {
 
 	private String imageUrl;
 
-	private String imageAlt;
 }

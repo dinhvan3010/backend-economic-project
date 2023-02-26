@@ -3,6 +3,8 @@ package net.codejava.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,10 +28,14 @@ public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+
+    @ManyToOne
     private Order order;
+
     @ManyToOne
     private Product product;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderDetail")
+
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "orderDetail")
+    @JsonIgnore
     List<QuantityOrder> quantityOrders;
 }

@@ -20,7 +20,6 @@ public class ProductConverter {
 			for (int i = 0; i < pi.size(); i++) {
 				ImageRespDTO ird = new ImageRespDTO();
 				ProductImage productImage = pi.get(i);
-				ird.setImageAlt(productImage.getAlt());
 				ird.setImageUrl(productImage.getUrl());
 
 				productRespDTO.getImgs().add(ird);

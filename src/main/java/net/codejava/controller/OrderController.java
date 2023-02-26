@@ -7,7 +7,7 @@ import net.codejava.dto.OrderRespDTO;
 import net.codejava.exceptions.MyAppException;
 import net.codejava.model.*;
 import net.codejava.repository.*;
-import net.codejava.request.OrderRequest;
+import net.codejava.request.CreateOrderRequest;
 import net.codejava.request.ProductOrder;
 import net.codejava.response.StatusResp;
 import net.codejava.services.IListConverter;
@@ -17,12 +17,14 @@ import net.codejava.utils.StaticData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@Transactional
 @RequestMapping("/api/order")
 public class OrderController extends AbstractRestController {
 
@@ -31,6 +33,9 @@ public class OrderController extends AbstractRestController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    InventoryRepository inventoryRepository;
 
     @Autowired
     OrderDetailRepository orderDetailRepository;
@@ -45,7 +50,7 @@ public class OrderController extends AbstractRestController {
     IListConverter listConverter;
 
     @PostMapping("/create")
-    public StatusResp createOrder(@RequestBody OrderRequest request) {
+    public StatusResp createOrder(@RequestBody CreateOrderRequest request) {
         StatusResp resp = new StatusResp();
 
         Order order = new Order();
@@ -84,11 +89,11 @@ public class OrderController extends AbstractRestController {
                 QuantityOrder quantityOrder = new QuantityOrder();
                 int size = quantityOrders.get(j).getSize();
                 int quantity = quantityOrders.get(j).getQuantity();
-                if(map.get(size) < quantity){
+                if (map.get(size) < quantity) {
                     throw new MyAppException(StaticData.ERROR_CODE.NOT_ENOUGH_QUANTITY.getMessage(), StaticData.ERROR_CODE.NOT_ENOUGH_QUANTITY.getCode());
                 }
-                for (int k = 0; k <inventories.size() ; k++) {
-                    if(inventories.get(k).getSize() == quantityOrders.get(j).getSize()){
+                for (int k = 0; k < inventories.size(); k++) {
+                    if (inventories.get(k).getSize() == quantityOrders.get(j).getSize()) {
                         inventories.get(k).setQuantity(inventories.get(k).getQuantity() - quantityOrders.get(j).getQuantity());
                     }
                 }
@@ -108,7 +113,7 @@ public class OrderController extends AbstractRestController {
     public StatusResp list() {
         StatusResp resp = new StatusResp();
         User user = getUserSession();
-        List<Order> orders = manageOrderService.getOrders(user.getId());
+        List<Order> orders = manageOrderService.getOrdersByUerId(user.getId());
         if (orders.isEmpty()) {
             throw new MyAppException(StaticData.ERROR_CODE.YOUR_ORDERS_IS_NULL.getMessage(), StaticData.ERROR_CODE.YOUR_ORDERS_IS_NULL.getCode());
         }
@@ -117,12 +122,11 @@ public class OrderController extends AbstractRestController {
         return resp;
     }
 
-
     @GetMapping("/detail")
     public StatusResp orderDetail(@RequestParam int orderId) {
         StatusResp resp = new StatusResp();
-        List<OrderDetail> orderDetails =manageOrderService.getOrderDetail(orderId);
-        if(orderDetails.isEmpty()){
+        List<OrderDetail> orderDetails = manageOrderService.getOrderDetail(orderId);
+        if (orderDetails.isEmpty()) {
             throw new MyAppException(StaticData.ERROR_CODE.ORDER_NOT_FOUND.getMessage(), StaticData.ERROR_CODE.ORDER_NOT_FOUND.getCode());
         }
         List<OrderDetailRespDTO> orderDetailRespDTOS = listConverter.toListResponse(orderDetails, OrderDetailConverter::toRespDTO);
@@ -134,13 +138,32 @@ public class OrderController extends AbstractRestController {
     public StatusResp cancelOrder(@RequestParam int orderId) {
         StatusResp resp = new StatusResp();
         User user = getUserSession();
-        Order order = orderRepository.getByIdAndUserId(orderId, user.getId());
-        if(order == null){
+        Order order = manageOrderService.getOrderByIdAndUserId(orderId, user.getId());
+        if (order == null) {
             throw new MyAppException(StaticData.ERROR_CODE.ORDER_NOT_FOUND.getMessage(), StaticData.ERROR_CODE.ORDER_NOT_FOUND.getCode());
         }
         int statusOrder = order.getStatus();
-        if(statusOrder != StaticData.statusOrder.OPEN){
+        if (statusOrder != StaticData.statusOrder.OPEN) {
             throw new MyAppException(StaticData.ERROR_CODE.CANNOT_CANCEL_ORDER.getMessage(), StaticData.ERROR_CODE.CANNOT_CANCEL_ORDER.getCode());
+        }
+        List<OrderDetail> orderDetails = order.getOrderDetails();
+        for (int i = 0; i < orderDetails.size(); i++) {
+            Product product = orderDetails.get(i).getProduct();
+            if (product == null) {
+                throw new MyAppException(StaticData.ERROR_CODE.PRODUCT_NOT_FOUND.getMessage(), StaticData.ERROR_CODE.PRODUCT_NOT_FOUND.getCode());
+            }
+            List<QuantityOrder> quantityOrders = orderDetails.get(i).getQuantityOrders();
+            for (int j = 0; j < quantityOrders.size(); j++) {
+                int size = quantityOrders.get(j).getSize();
+                int quantity = quantityOrders.get(j).getQuantity();
+                List<Inventory> inventories = product.getInventories();
+                for (int k = 0; k < inventories.size(); k++) {
+                    if (inventories.get(k).getSize() == size) {
+                        inventories.get(k).setQuantity(inventories.get(k).getQuantity() + quantity);
+                    }
+                }
+                inventoryRepository.saveAll(inventories);
+            }
         }
         order.setStatus(StaticData.statusOrder.CANCELLED);
         orderRepository.save(order);
