@@ -3,6 +3,9 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+docker-database/docker-mongo/mongodb
+docker-database/docker-redis/redis
+docker-database/
 
 ### STS ###
 .apt_generated
